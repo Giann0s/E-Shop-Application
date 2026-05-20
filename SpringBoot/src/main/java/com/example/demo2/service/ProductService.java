@@ -1,5 +1,6 @@
 package com.example.demo2.service;
 
+import com.example.demo2.models.Category;
 import com.example.demo2.models.Product;
 import com.example.demo2.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,22 @@ public class ProductService {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Not Found");
         return prod.get();
+    }
+
+    public Product updateProduct(Long id, String name, Float price, List<Category> categoryList){
+        Optional<Product> prod = productRepository.findById(id);
+        if (!prod.isPresent())
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not Found");
+        Product product = prod.get();
+        if (name != null)
+            product.setName(name);
+        if (price != null)
+            product.setPrice(price);
+        if (categoryList != null)
+            product.setCategoryList(categoryList);
+        productRepository.save(product);
+        return product;
     }
 
 
