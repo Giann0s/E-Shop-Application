@@ -52,7 +52,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public List<Product> deleteCourse(
+    public List<Product> deleteProduct(
             @RequestParam Long id){
         return productService.deleteProduct(id);
     }
