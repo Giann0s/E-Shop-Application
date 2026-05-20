@@ -50,4 +50,12 @@ public class ProductService {
     }
 
 
+    public List<Product> deleteProduct(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(!productOptional.isPresent())
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not Found");
+        productRepository.deleteById(id);
+        return productRepository.findAll();
+    }
 }

@@ -51,5 +51,11 @@ public class ProductController {
         return new ProductSlim(updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getPrice(), categoryNames);
     }
 
+    @DeleteMapping("/{id}")
+    public List<Product> deleteProduct(
+            @RequestParam Long id){
+        return productService.deleteProduct(id);
+    }
+
 
 }
