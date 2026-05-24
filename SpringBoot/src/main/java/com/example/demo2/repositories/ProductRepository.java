@@ -15,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DISTINCT p FROM Product p WHERE p.price <= :maxPrice")
     List<Product> findByPrice(@Param("maxPrice") Float maxPrice);
 
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.categoryList c WHERE c.id IN :categoryIds AND p.price <= :maxPrice")
+    List<Product> findByCategoriesAndPrice(@Param("categoryIds") List<Long> categoryIds, @Param("maxPrice") Float maxPrice);
+
 }

@@ -3,14 +3,17 @@ package com.example.demo2.controllers;
 import com.example.demo2.dto.ProductSlim;
 import com.example.demo2.models.Category;
 import com.example.demo2.models.Product;
+import com.example.demo2.repositories.ProductRepository;
 import com.example.demo2.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/products")
@@ -26,49 +29,31 @@ public class ProductController {
     }
 
     @GetMapping()
-    public List<ProductSlim> getProducts(@RequestParam(required = false) List<Long> categoryIds) {
+    public List<ProductSlim> getProducts(@RequestParam(required = false) Float maxPrice,
+                                         @RequestParam (required = false) List<Long> categoryIds) {
+
+        if (categoryIds != null) {
+            categoryIds = categoryIds.stream()
+                    .filter(id -> id != null) 
+                    .collect(Collectors.toList());
+        }
 
         List<Product> products;
 
-        if (categoryIds == null || categoryIds.isEmpty()){
-            products = productService.getAllProducts();
-        } else {
+        boolean hasCategories = (categoryIds != null && !categoryIds.isEmpty());
+        boolean hasPrice = (maxPrice != null);
+
+        if (hasCategories && hasPrice) {
+            products = productService.getFilteredPriceAndCategoryProducts(categoryIds, maxPrice);
+        }
+        else if (hasCategories) {
             products = productService.getFilteredProducts(categoryIds);
         }
-
-        return products.stream()
-                .map(product -> {
-                    List<String> categoryNames = product.getCategoryList()
-                            .stream()
-                            .map(category -> category.getName())
-                            .collect(Collectors.toList());
-                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
-                })
-                .collect(Collectors.toList());
-
-
-       /*
-        Product product = productService.getProduct(id);
-
-        List<String> categoryNames = product.getCategoryList()
-                .stream()
-                .map(category -> category.getName())
-                .collect(Collectors.toList());
-
-
-        return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
-
-        */
-    }
-
-    @GetMapping("/price")
-    public List<ProductSlim> getProductsByPrice(@RequestParam(required = false) Float maxPrice){
-        List<Product> products;
-
-        if (maxPrice == null){
-            products = productService.getAllProducts();
-        } else {
+        else if (hasPrice) {
             products = productService.getFilteredPriceProducts(maxPrice);
+        }
+        else {
+            products = productService.getAllProducts();
         }
 
         return products.stream()
@@ -81,6 +66,7 @@ public class ProductController {
                 })
                 .collect(Collectors.toList());
     }
+
 
     @PutMapping("/{id}")
     public ProductSlim updateProduct(@PathVariable Long id,
