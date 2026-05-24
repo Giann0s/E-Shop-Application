@@ -25,8 +25,29 @@ public class ProductController {
        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ProductSlim getProduct(@PathVariable Long id) {
+    @GetMapping()
+    public List<ProductSlim> getProducts(@RequestParam(required = false) List<Long> categoryIds) {
+
+        List<Product> products;
+
+        if (categoryIds == null || categoryIds.isEmpty()){
+            products = productService.getAllProducts();
+        } else {
+            products = productService.getFilteredProducts(categoryIds);
+        }
+
+        return products.stream()
+                .map(product -> {
+                    List<String> categoryNames = product.getCategoryList()
+                            .stream()
+                            .map(category -> category.getName())
+                            .collect(Collectors.toList());
+                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
+                })
+                .collect(Collectors.toList());
+
+
+       /*
         Product product = productService.getProduct(id);
 
         List<String> categoryNames = product.getCategoryList()
@@ -36,6 +57,8 @@ public class ProductController {
 
 
         return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
+
+        */
     }
 
     @PutMapping("/{id}")

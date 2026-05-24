@@ -58,4 +58,10 @@ public class ProductService {
         productRepository.deleteById(id);
         return productRepository.findAll();
     }
+
+    public List<Product> getFilteredProducts(List<Long> categoryIds){
+        return productRepository.findByCategories(categoryIds);
+    }
+
+
 }
