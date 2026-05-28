@@ -8,6 +8,7 @@ import com.example.demo2.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('PRIVILEGED')")
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
        Product newProduct = productService.addProduct(product);
        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
@@ -69,6 +71,7 @@ public class ProductController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('PRIVILEGED')")
     public ProductSlim updateProduct(@PathVariable Long id,
                                      @RequestBody Product productUpdates) {
         Product updatedProduct = productService.updateProduct(id, productUpdates.getName(), productUpdates.getPrice(), productUpdates.getCategoryList());
@@ -82,6 +85,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('PRIVILEGED')")
     public List<Product> deleteProduct(
             @RequestParam Long id){
         return productService.deleteProduct(id);

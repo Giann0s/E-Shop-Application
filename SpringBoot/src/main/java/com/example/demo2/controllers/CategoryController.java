@@ -7,6 +7,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +20,14 @@ public class CategoryController {
     CategoryService categoryService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('PRIVILEGED')")
     public ResponseEntity<Category> addCategory(@RequestBody Category category){
         Category newCategory = categoryService.addCategory(category);
         return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('PRIVILEGED')")
     public List<Category> deleteCategory(
             @RequestParam Long id){
         return categoryService.deleteCategory(id);
