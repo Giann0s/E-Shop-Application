@@ -21,6 +21,8 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
@@ -85,6 +87,11 @@ public class ProductController {
     public List<Product> deleteProduct(
             @RequestParam Long id){
         return productService.deleteProduct(id);
+    }
+
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String keyword) {
+        return productRepository.findBySimilarName(keyword);
     }
 
 
