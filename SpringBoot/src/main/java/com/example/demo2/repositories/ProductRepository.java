@@ -18,4 +18,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DISTINCT p FROM Product p JOIN p.categoryList c WHERE c.id IN :categoryIds AND p.price <= :maxPrice")
     List<Product> findByCategoriesAndPrice(@Param("categoryIds") List<Long> categoryIds, @Param("maxPrice") Float maxPrice);
 
+    @Query(value = "SELECT * FROM products WHERE " +
+            "LOWER(name) LIKE LOWER(CONCAT('%', :input, '%')) " +
+            "OR similarity(LOWER(name), LOWER(:input)) > 0.2",
+            nativeQuery = true)
+        //Search by trigrams
+    List<Product> findBySimilarName(@Param("input") String input);
+
+
 }
