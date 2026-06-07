@@ -23,7 +23,7 @@ public class ProductController {
     @Autowired
     ProductService productService;
     @Autowired
-    private ProductRepository productRepository;
+    ProductRepository productRepository;
 
     @PostMapping
     @PreAuthorize("hasAuthority('PRIVILEGED')")
@@ -94,8 +94,18 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String keyword) {
-        return productRepository.findBySimilarName(keyword);
+    public List<ProductSlim> searchProducts(@RequestParam String keyword) {
+        List<Product> searchResults = productRepository.findBySimilarName(keyword);
+
+        return searchResults.stream()
+                .map(product -> {
+                    List<String> categoryNames = product.getCategoryList()
+                            .stream()
+                            .map(category -> category.getName())
+                            .collect(Collectors.toList());
+                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
+                })
+                .collect(Collectors.toList());
     }
 
 

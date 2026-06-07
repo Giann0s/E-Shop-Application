@@ -22,7 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "LOWER(name) LIKE LOWER(CONCAT('%', :input, '%')) " +
             "OR similarity(LOWER(name), LOWER(:input)) > 0.2",
             nativeQuery = true)
-        //Search by trigrams
     List<Product> findBySimilarName(@Param("input") String input);
 
 
