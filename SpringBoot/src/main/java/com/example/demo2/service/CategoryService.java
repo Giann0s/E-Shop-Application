@@ -29,4 +29,29 @@ public class CategoryService {
         categoryRepository.deleteById(id);
         return categoryRepository.findAll();
     }
+
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
+    }
+
+    public Category getCategoryById(Long id) {
+        Optional<Category> cat = categoryRepository.findById(id);
+        if (!cat.isPresent()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not Found");
+        }
+        return cat.get();
+    }
+
+    public Category updateCategory(Long id, String name) {
+        Optional<Category> cat = categoryRepository.findById(id);
+        if (!cat.isPresent())
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not Found");
+        Category category = cat.get();
+        if (name != null)
+            category.setName(name);
+        categoryRepository.save(category);
+        return category;
+    }
 }

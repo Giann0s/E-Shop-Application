@@ -19,6 +19,27 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    @GetMapping()
+    public ResponseEntity<List<Category>> getCategories() {
+        List<Category> categories = categoryService.getCategories();
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        Category category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(category);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('PRIVILEGED')")
+    public ResponseEntity<Category> updateCategory(
+            @PathVariable Long id,
+            @RequestBody Category category) {
+        Category updatedCategory = categoryService.updateCategory(id, category.getName());
+        return ResponseEntity.ok(updatedCategory);
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority('PRIVILEGED')")
     public ResponseEntity<Category> addCategory(@RequestBody Category category){
@@ -32,4 +53,6 @@ public class CategoryController {
             @RequestParam Long id){
         return categoryService.deleteCategory(id);
     }
+
+
 }
