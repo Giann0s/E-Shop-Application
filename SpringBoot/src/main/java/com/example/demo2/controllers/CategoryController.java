@@ -50,7 +50,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('PRIVILEGED')")
     public List<Category> deleteCategory(
-            @RequestParam Long id){
+            @PathVariable Long id){
         return categoryService.deleteCategory(id);
     }
 

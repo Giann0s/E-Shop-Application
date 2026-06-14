@@ -6,13 +6,15 @@ public class ProductSlim {
     private Long id;
     private String name;
     private Float price;
+    private String imageUrl;
     private List<String> categories;
 
-    public ProductSlim(Long id, String name, Float price, List<String> categories){
+    public ProductSlim(Long id, String name, Float price, String imageUrl, List<String> categories){
         super();
         this.id = id;
         this.name = name;
         this.price = price;
+        this.imageUrl = imageUrl;
         this.categories = categories;
 
     }
@@ -47,5 +49,13 @@ public class ProductSlim {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageURL) {
+        this.imageUrl = imageURL;
     }
 }

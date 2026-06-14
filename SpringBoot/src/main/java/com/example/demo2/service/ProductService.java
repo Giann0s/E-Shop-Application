@@ -33,7 +33,7 @@ public class ProductService {
         return prod.get();
     }
 
-    public Product updateProduct(Long id, String name, Float price, List<Category> categoryList){
+    public Product updateProduct(Long id, String name, Float price, List<Category> categoryList, String imageUrl){
         Optional<Product> prod = productRepository.findById(id);
         if (!prod.isPresent())
             throw new ResponseStatusException(
@@ -45,6 +45,8 @@ public class ProductService {
             product.setPrice(price);
         if (categoryList != null)
             product.setCategoryList(categoryList);
+        if (imageUrl != null)
+            product.setImageUrl(imageUrl);
         productRepository.save(product);
         return product;
     }

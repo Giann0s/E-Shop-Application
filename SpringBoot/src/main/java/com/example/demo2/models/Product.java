@@ -13,6 +13,7 @@ public class Product {
     private Long id;
     private String name;
     private Float price;
+    private String imageUrl;
     @ManyToMany
     @JoinTable(name="products_categories",
         joinColumns = @JoinColumn(
@@ -64,4 +65,11 @@ public class Product {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

@@ -66,7 +66,7 @@ public class ProductController {
                             .stream()
                             .map(category -> category.getName())
                             .collect(Collectors.toList());
-                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
+                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), categoryNames);
                 })
                 .collect(Collectors.toList());
     }
@@ -76,20 +76,20 @@ public class ProductController {
     @PreAuthorize("hasAuthority('PRIVILEGED')")
     public ProductSlim updateProduct(@PathVariable Long id,
                                      @RequestBody Product productUpdates) {
-        Product updatedProduct = productService.updateProduct(id, productUpdates.getName(), productUpdates.getPrice(), productUpdates.getCategoryList());
+        Product updatedProduct = productService.updateProduct(id, productUpdates.getName(), productUpdates.getPrice(), productUpdates.getCategoryList(), productUpdates.getImageUrl());
 
         List<String> categoryNames = updatedProduct.getCategoryList()
                 .stream()
                 .map(category -> category.getName())
                 .collect(Collectors.toList());
 
-        return new ProductSlim(updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getPrice(), categoryNames);
+        return new ProductSlim(updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getPrice(), updatedProduct.getImageUrl(), categoryNames);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('PRIVILEGED')")
     public List<Product> deleteProduct(
-            @RequestParam Long id){
+            @PathVariable Long id){
         return productService.deleteProduct(id);
     }
 
@@ -103,7 +103,7 @@ public class ProductController {
                             .stream()
                             .map(category -> category.getName())
                             .collect(Collectors.toList());
-                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), categoryNames);
+                    return new ProductSlim(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), categoryNames);
                 })
                 .collect(Collectors.toList());
     }
