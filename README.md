@@ -27,7 +27,6 @@
 
 ## Επιπλέον πληροφορίες
 
-**Βάση Δεδομένων:**
 1. Το username της βάσης είναι `postgres` και το password `mysecretpassword`. To port είναι το `5432` και το Database Name είναι `postgres` (όπως αναγράφεται και στο `application.properties`).
 2. Για την εκτέλεση του front end χρειάζεται να εκτελεστούν οι εντολές `npm install` και έπειτα `npm start` στο terminal.
    
